@@ -73,19 +73,23 @@ class Account {
         }
     }
 
+
     private function validateUsername($un)
     {
         if(strlen($un) < 2 || strlen($un) > 25){
             array_push($this->errorArray, Constants::$usernameCharacters);
-
-            $query = $this->con->prepare('SELECT * FROM users WHERE username=:un');
-            $query->bindValue(":un", $un);
-            $query->execute();
-            if($query->rowCount() != 0){
-                array_push($this->errorArray, Constants::$usernameTaken);
-            }
-        }   
+            return;
+        }
+        
+        $query = $this->con->prepare('SELECT * FROM users WHERE username=:un');
+        $query->bindValue(":un", $un);
+        $query->execute();
+        
+        if($query->rowCount() != 0){
+            array_push($this->errorArray, Constants::$usernameTaken);
+        }
     }
+
 
     private function validateEmails($em, $em2){
         if($em  != $em2)
