@@ -14,6 +14,7 @@ if(isset($_POST["submitButton"])){
 
     if($success)
     {
+        $_SESSION["userLoggedIn"] = $username;
         header("Location: index.php");
     }
 }
