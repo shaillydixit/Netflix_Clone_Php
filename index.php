@@ -10,5 +10,5 @@ $userLoggedIn = $_SESSION["userLoggedIn"];
 
 $preview = new PreviewProvider($con, $userLoggedIn);
 
-echo $preview->createPreviewVideo();
+echo $preview->createPreviewVideo(null);
 ?>

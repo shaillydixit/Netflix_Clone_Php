@@ -7,9 +7,21 @@ class PreviewProvider{
         $this->con = $con;
         $this->username = $username;
     }
-    public function createPreviewVideo()
+    public function createPreviewVideo($entity)
     {
-        echo "hello";
+        if($entity == null)
+        {
+            $entity = $this->getRandomEntity();
+        }
+    }
+
+    private function getRandomEntity()
+    {
+        $query = $this->con->prepare("SELECT * FROM entities ORDER BY RAND() LIMIT 1");
+        $query->execute();
+
+        $row = $query->fetch(PDO::FETCH_ASSOC);
+        echo $row["name"];
     }
 }
 
