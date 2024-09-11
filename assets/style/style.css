@@ -240,3 +240,6 @@ button i {
     overflow-y: auto;
   }
 
+.previewCategories.noScroll .category .entities {
+    white-space : normal;
+}
