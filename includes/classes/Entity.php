@@ -36,6 +36,63 @@ class Entity {
     {
         return $this->sqlData["preview"];
     }
+
+    // public function getSeasons()
+    // {
+    //     $query = $this->con->prepare("SELECT * FROM videos WHERE entityId=:id AND isMovie=0 ORDER BY season, episode ASC");
+
+    //     $query->bindValue(":id", $this->getId());
+    //     $query->execute();
+
+    //     $seasons = array();
+    //     $videos = array();
+    //     $currentSeason = null;
+    //     while($row = $query->fetch(PDO::FETCH_ASSOC))
+    //     {
+    //         if($currentSeason != null && $currentSeason != $row["season"])
+    //         {
+    //             $season[] = new Season($currentSeason, $videos);
+    //             $videos = array();
+    //         }
+    //         $currentSeason = $row["season"];
+    //         $videos[] = new Video($this->con, $row);
+    //     }
+
+    //     if(sizeof($videos) != 0)
+    //     {
+    //         $seasons[] = new Season($currentSeason, $videos);
+    //     }
+    //     return $seasons;
+    // }
+    public function getSeasons()
+    {
+        $query = $this->con->prepare("SELECT * FROM videos WHERE entityId=:id AND isMovie=0 ORDER BY season, episode ASC");
+        $query->bindValue(":id", $this->getId());
+        $query->execute();
+
+        $seasons = array();
+        $videos = array();
+        $currentSeason = null;
+
+        while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+            if ($currentSeason !== null && $currentSeason !== $row["season"]) {
+                // Create a new Season object and add the old season to the array
+                $seasons[] = new Season($currentSeason, $videos);
+                $videos = array(); // Reset videos array for the new season
+            }
+
+            $currentSeason = $row["season"];
+            $videos[] = new Video($this->con, $row);
+        }
+
+        // Don't forget to add the last season
+        if (sizeof($videos) !== 0) {
+            $seasons[] = new Season($currentSeason, $videos);
+        }
+
+        return $seasons;
+    }
+
 }
 
 ?>

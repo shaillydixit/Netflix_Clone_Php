@@ -188,3 +188,20 @@ button i {
     overflow-y: hidden;
     white-space: nowrap;
 }
+
+.previewCategories {
+    padding: 0 50px;
+}
+
+.scrollbars_none::-webkit-scrollbar {
+    display: none;
+  }
+
+  .errorBanner{
+    color: #fff;
+    position: absolute;
+    top: 25%;
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+  }
