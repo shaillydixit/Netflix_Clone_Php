@@ -13,3 +13,8 @@ function previewEnded()
     $(".previewImage").toggle();
 
 }
+
+function goBack()
+{
+    window.history.back();
+}
