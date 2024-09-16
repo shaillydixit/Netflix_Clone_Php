@@ -24,12 +24,15 @@ $userLoggedIn = $_SESSION["userLoggedIn"];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to Netflix</title>
     <link rel="stylesheet" type="text/css" href="assets/style/style.css">
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/06a651c8da.js" crossorigin="anonymous"></script>
-<script src="assets/js/script.js"></script>
+    <script src="assets/js/script.js"></script>
 </head>
 
 <body>
-<div class="wrapper">
-    
-   
+    <div class="wrapper">
+
+      <?php if(!isset($hideNav)) {
+          include_once("includes/navbar.php");
+        }?>
