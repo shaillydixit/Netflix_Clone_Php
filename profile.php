@@ -43,7 +43,7 @@ if(isset($_POST["savePasswordButton"])){
 }
 ?>
 
-?>
+
 
 <div class="settingsContainer column">
     <div class="formSection">
