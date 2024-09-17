@@ -1,11 +1,16 @@
 <?php
 require_once("includes/header.php");
+require_once("includes/paypalConfig.php");
 require_once("includes/classes/Account.php");
 require_once("includes/classes/FormSanitizer.php");
 require_once("includes/classes/Constants.php");
+require_once("includes/classes/BillingDetails.php");
+
+$user = new User($con, $userLoggedIn);
 
 $detailMessage = "";
 $passwordMessage = "";
+$subscriptionMessage = "";
 if(isset($_POST["saveDetailsButton"])){
     $account = new Account($con);
     $firstName = FormSanitizer::sanitizeFormString($_POST["firstName"]);
@@ -41,6 +46,37 @@ if(isset($_POST["savePasswordButton"])){
 </div>";
     }
 }
+if (isset($_GET['success']) && $_GET['success'] == 'true') {
+    $token = $_GET['token'];
+    $agreement = new \PayPal\Api\Agreement();
+    $subscriptionMessage = "<div class='alertError'>
+   Something wend wrong
+</div>";
+    try {
+      // Execute agreement
+      $agreement->execute($token, $apiContext);
+
+      $result = BillingDetails::insertDetails($con, $agreement, $token, $userLoggedIn);
+        $result = $result && $User->setIsSubscribed(1);
+        if($result) {
+            $subscriptionMessage = "<div class='alertSuccess'>
+            You are all signed up!
+        </div>";
+        }
+    } catch (PayPal\Exception\PayPalConnectionException $ex) {
+      echo $ex->getCode();
+      echo $ex->getData();
+      die($ex);
+    } catch (Exception $ex) {
+      die($ex);
+    }
+  } 
+  else if (isset($_GET['success']) && $_GET['success'] == 'false') {
+    $subscriptionMessage = "<div class='alertError'>
+            User Cancelled or Something went wrong
+        </div>";
+  }
+
 ?>
 
 
@@ -76,5 +112,19 @@ if(isset($_POST["savePasswordButton"])){
             </div>
             <input type="submit" name="savePasswordButton" value="Save">
         </form>
+    </div>
+    <div class="formSection">
+            <h2>Subscription</h2>
+            <div class="message">
+                <?php echo $subscriptionMessage; ?>
+            </div>
+            <?php
+            if($user->getIsSubscribed()){
+                echo "<h3>You are subscribed! Go to Paypal to cancel</h3>";
+            }else{
+                echo "<a href='billing.php'>Subscribe to Netflix</a>";
+            }
+            ?>
+           
     </div>
 </div>
